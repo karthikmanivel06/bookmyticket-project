@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Seats - Movie Booking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #00adb5;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #00adb5;
+        }
+        
+        .booking-info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .booking-info h2 {
+            color: #00adb5;
+            margin-bottom: 10px;
+        }
+        
+        .screen {
+            width: 80%;
+            height: 20px;
+            background: linear-gradient(to bottom, #e0e0e0, #888);
+            margin: 0 auto 40px;
+            border-radius: 50% 50% 0 0;
+            text-align: center;
+            color: #333;
+            font-weight: bold;
+            padding-top: 2px;
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+        }
+        
+        .seats-container {
+            max-width: 800px;
+            margin: 0 auto 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+        }
+        
+        .row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .seat {
+            width: 35px;
+            height: 35px;
+            background: #444;
+            border-radius: 5px 5px 0 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        .seat:hover {
+            transform: scale(1.1);
+        }
+        
+        .seat.selected {
+            background: #00adb5;
+        }
+        
+        .seat.occupied {
+            background: #ff4757;
+            cursor: not-allowed;
+        }
+        
+        .seat.vip {
+            background: #ffa502;
+        }
+        
+        .seat.vip.selected {
+            background: #ff7b00;
+        }
+        
+        .seat.standard {
+            background: #444;
+        }
+        
+        .seat-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+        }
+        
+        .selected-seats {
+            background: rgba(0, 173, 181, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .total-price {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: #00adb5;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+        
+        .btn-back {
+            background: #666;
+            color: white;
+        }
+        
+        .btn-next {
+            background: #00adb5;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .seat {
+                width: 28px;
+                height: 28px;
+                font-size: 10px;
+            }
+            
+            .row {
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">CINEMAX</div>
+        <div class="user-menu">
+            <a href="login.html" style="color: white; text-decoration: none; margin-left: 20px;">Login</a>
+        </div>
+    </div>
+
+    <div class="booking-info">
+        <h2>Master</h2>
+        <div id="bookingDetails">PVR Cinemas • Today 08:00 PM • Screen 5</div>
+    </div>
+
+    <div class="screen">SCREEN THIS WAY</div>
+
+    <div class="seats-container">
+        <!-- Row A -->
+        <div class="row">
+            <div class="seat standard" data-seat="A1">A1</div>
+            <div class="seat standard" data-seat="A2">A2</div>
+            <div class="seat standard" data-seat="A3">A3</div>
+            <div class="seat standard" data-seat="A4">A4</div>
+            <div class="seat standard" data-seat="A5">A5</div>
+            <div class="seat standard" data-seat="A6">A6</div>
+            <div class="seat standard" data-seat="A7">A7</div>
+            <div class="seat standard" data-seat="A8">A8</div>
+        </div>
+        
+        <!-- Row B -->
+        <div class="row">
+            <div class="seat standard" data-seat="B1">B1</div>
+            <div class="seat standard" data-seat="B2">B2</div>
+            <div class="seat standard occupied" data-seat="B3">B3</div>
+            <div class="seat standard occupied" data-seat="B4">B4</div>
+            <div class="seat standard" data-seat="B5">B5</div>
+            <div class="seat standard" data-seat="B6">B6</div>
+            <div class="seat standard" data-seat="B7">B7</div>
+            <div class="seat standard" data-seat="B8">B8</div>
+        </div>
+        
+        <!-- Row C (VIP) -->
+        <div class="row">
+            <div class="seat vip" data-seat="C1">C1</div>
+            <div class="seat vip" data-seat="C2">C2</div>
+            <div class="seat vip occupied" data-seat="C3">C3</div>
+            <div class="seat vip" data-seat="C4">C4</div>
+            <div class="seat vip" data-seat="C5">C5</div>
+            <div class="seat vip occupied" data-seat="C6">C6</div>
+            <div class="seat vip" data-seat="C7">C7</div>
+            <div class="seat vip" data-seat="C8">C8</div>
+        </div>
+        
+        <!-- Row D (VIP) -->
+        <div class="row">
+            <div class="seat vip" data-seat="D1">D1</div>
+            <div class="seat vip" data-seat="D2">D2</div>
+            <div class="seat vip" data-seat="D3">D3</div>
+            <div class="seat vip" data-seat="D4">D4</div>
+            <div class="seat vip occupied" data-seat="D5">D5</div>
+            <div class="seat vip occupied" data-seat="D6">D6</div>
+            <div class="seat vip" data-seat="D7">D7</div>
+            <div class="seat vip" data-seat="D8">D8</div>
+        </div>
+        
+        <!-- Row E -->
+        <div class="row">
+            <div class="seat standard" data-seat="E1">E1</div>
+            <div class="seat standard" data-seat="E2">E2</div>
+            <div class="seat standard" data-seat="E3">E3</div>
+            <div class="seat standard" data-seat="E4">E4</div>
+            <div class="seat standard occupied" data-seat="E5">E5</div>
+            <div class="seat standard occupied" data-seat="E6">E6</div>
+            <div class="seat standard" data-seat="E7">E7</div>
+            <div class="seat standard" data-seat="E8">E8</div>
+        </div>
+    </div>
+
+    <div class="seat-info">
+        <div class="legend-item">
+            <div class="legend-box" style="background: #444;"></div>
+            <span>Available</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-box" style="background: #00adb5;"></div>
+            <span>Selected</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-box" style="background: #ff4757;"></div>
+            <span>Occupied</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-box" style="background: #ffa502;"></div>
+            <span>VIP (₹350)</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-box" style="background: #444;"></div>
+            <span>Standard (₹250)</span>
+        </div>
+    </div>
+
+    <div class="selected-seats">
+        <h3>Selected Seats: <span id="selectedSeatsList">None</span></h3>
+        <p>Total Seats: <span id="totalSeats">0</span></p>
+    </div>
+
+    <div class="total-price">
+        Total: ₹<span id="totalPrice">0</span>
+    </div>
+
+    <div class="navigation-buttons">
+        <button class="btn btn-back" onclick="goBack()">← Back to Theaters</button>
+        <button class="btn btn-next" onclick="proceedToPayment()">Proceed to Payment →</button>
+    </div>
+
+    <script>
+        // Load booking details
+        document.getElementById('bookingDetails').textContent = 
+            `${localStorage.getItem('selectedTheater') || 'PVR Cinemas'} • ${localStorage.getItem('selectedDate') || 'Today'} ${localStorage.getItem('selectedShowtime') || '08:00 PM'} • Screen 5`;
+
+        let selectedSeats = [];
+        let seatPrices = {
+            'standard': 250,
+            'vip': 350
+        };
+
+        // Seat selection
+        document.querySelectorAll('.seat:not(.occupied)').forEach(seat => {
+            seat.addEventListener('click', function() {
+                const seatId = this.getAttribute('data-seat');
+                
+                if (this.classList.contains('selected')) {
+                    // Deselect seat
+                    this.classList.remove('selected');
+                    selectedSeats = selectedSeats.filter(s => s !== seatId);
+                } else {
+                    // Select seat
+                    this.classList.add('selected');
+                    selectedSeats.push(seatId);
+                }
+                
+                updateSelection();
+            });
+        });
+
+        function updateSelection() {
+            const seatsList = document.getElementById('selectedSeatsList');
+            const totalSeats = document.getElementById('totalSeats');
+            const totalPrice = document.getElementById('totalPrice');
+            
+            seatsList.textContent = selectedSeats.length > 0 ? selectedSeats.join(', ') : 'None';
+            totalSeats.textContent = selectedSeats.length;
+            
+            // Calculate total price
+            let total = 0;
+            selectedSeats.forEach(seat => {
+                const seatElement = document.querySelector(`[data-seat="${seat}"]`);
+                const seatType = seatElement.classList.contains('vip') ? 'vip' : 'standard';
+                total += seatPrices[seatType];
+            });
+            
+            totalPrice.textContent = total;
+        }
+
+        function goBack() {
+            window.location.href = 'theaters.html';
+        }
+
+        function proceedToPayment() {
+            if (selectedSeats.length === 0) {
+                alert('Please select at least one seat!');
+                return;
+            }
+            
+            // Save seat selection to localStorage
+            localStorage.setItem('selectedSeats', JSON.stringify(selectedSeats));
+            localStorage.setItem('totalPrice', document.getElementById('totalPrice').textContent);
+            
+            // Redirect to payment page
+            window.location.href = 'payment.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Sports Ticket</title>
+</head>
+<body>
+    <h1>⚽ Sports Event Booking</h1>
+    
+    <div id="sportsInfo">
+        <h2>Loading event details...</h2>
+    </div>
+    
+    <h3>Select Stand:</h3>
+    <div>
+        <button onclick="selectStand('north')">North Stand - ₹800</button>
+        <button onclick="selectStand('south')">South Stand - ₹1000</button>
+        <button onclick="selectStand('vip')">VIP Stand - ₹2000</button>
+    </div>
+    
+    <h3>Number of Tickets:</h3>
+    <input type="number" id="ticketCount" min="1" max="10" value="1">
+    
+    <br><br>
+    <button onclick="bookSports()">Book Now</button>
+    
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventName = urlParams.get('name') || localStorage.getItem('sportsName') || 'CSK vs MI - IPL 2024';
+        
+        document.getElementById('sportsInfo').innerHTML = `
+            <h2>${eventName}</h2>
+            <p>Venue: M.A. Chidambaram Stadium, Chennai</p>
+            <p>Date: April 10, 2024 | Time: 7:30 PM</p>
+        `;
+        
+        let selectedStand = '';
+        
+        function selectStand(stand) {
+            selectedStand = stand;
+            alert(`Selected ${stand} stand`);
+        }
+        
+        function bookSports() {
+            if (!selectedStand) {
+                alert('Please select a stand!');
+                return;
+            }
+            
+            const count = document.getElementById('ticketCount').value;
+            
+            // Save to localStorage
+            localStorage.setItem('bookingType', 'sports');
+            localStorage.setItem('eventName', eventName);
+            localStorage.setItem('stand', selectedStand);
+            localStorage.setItem('ticketCount', count);
+            localStorage.setItem('venue', 'M.A. Chidambaram Stadium, Chennai');
+            
+            // Go to payment
+            window.location.href = 'payment.html';
+        }
+    </script>
+</body>
+</html>

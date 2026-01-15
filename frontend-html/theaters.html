@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Theater - Movie Booking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #00adb5;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #00adb5;
+        }
+        
+        .user-menu a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+        
+        .user-menu a:hover {
+            background: #00adb5;
+        }
+        
+        .movie-info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .movie-poster-small {
+            width: 100px;
+            height: 150px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        
+        .movie-details h2 {
+            color: #00adb5;
+            margin-bottom: 10px;
+        }
+        
+        .movie-meta {
+            color: #ccc;
+            font-size: 14px;
+        }
+        
+        .date-selector {
+            margin-bottom: 30px;
+        }
+        
+        .date-scroll {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        
+        .date-item {
+            min-width: 80px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .date-item:hover, .date-item.active {
+            background: #00adb5;
+        }
+        
+        .theaters-container {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .theater-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+        
+        .theater-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .theater-info h3 {
+            color: #00adb5;
+            margin-bottom: 10px;
+        }
+        
+        .theater-address {
+            color: #ccc;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .showtimes {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .showtime-btn {
+            padding: 8px 15px;
+            background: rgba(0, 173, 181, 0.2);
+            border: 1px solid #00adb5;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .showtime-btn:hover {
+            background: #00adb5;
+        }
+        
+        .continue-btn {
+            display: block;
+            width: 200px;
+            margin: 40px auto;
+            padding: 15px;
+            background: #00adb5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .continue-btn:hover {
+            background: #0097a7;
+            transform: scale(1.05);
+        }
+        
+        @media (max-width: 768px) {
+            .theater-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .showtimes {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">CINEMAX</div>
+        <div class="user-menu">
+            <a href="login.html">Login</a>
+            <a href="index.html">Home</a>
+        </div>
+    </div>
+
+<div class="movie-info">
+    <img src="https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_FMjpg_UX1000_.jpg" 
+         alt="The Dark Knight" class="movie-poster-small">
+    <div class="movie-details">
+        <h2>The Dark Knight</h2>
+        <div class="movie-meta">
+            <span>Action/Crime/Drama • 2h 32m • UA • 4.9/5</span>
+        </div>
+    </div>
+</div>
+
+    <div class="date-selector">
+        <h3>Select Date</h3>
+        <div class="date-scroll">
+            <div class="date-item active">
+                <div>Today</div>
+                <div>Dec 22</div>
+            </div>
+            <div class="date-item">
+                <div>Tomorrow</div>
+                <div>Dec 23</div>
+            </div>
+            <div class="date-item">
+                <div>Sunday</div>
+                <div>Dec 24</div>
+            </div>
+            <div class="date-item">
+                <div>Monday</div>
+                <div>Dec 25</div>
+            </div>
+            <div class="date-item">
+                <div>Tuesday</div>
+                <div>Dec 26</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="theaters-container">
+        <div class="theater-card">
+            <div class="theater-info">
+                <h3>PVR Cinemas - Phoenix Marketcity</h3>
+                <div class="theater-address">Mahadevpura, Bangalore • 4.2 km</div>
+                <div class="facilities">Dolby Atmos • 4K • Recliner Seats</div>
+            </div>
+            <div class="showtimes">
+                <button class="showtime-btn" onclick="selectShowtime('10:00 AM')">10:00 AM</button>
+                <button class="showtime-btn" onclick="selectShowtime('01:30 PM')">01:30 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime('04:45 PM')">04:45 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime('08:00 PM')">08:00 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime('11:15 PM')">11:15 PM</button>
+            </div>
+        </div>
+
+        <div class="theater-card">
+            <div class="theater-info">
+                <h3>INOX - Garuda Mall</h3>
+                <div class="theater-address">Magrath Road, Bangalore • 6.5 km</div>
+                <div class="facilities">IMAX • 3D Available • Food Court</div>
+            </div>
+            <div class="showtimes">
+                <button class="showtime-btn" onclick="selectShowtime('11:00 AM')">11:00 AM</button>
+                <button class="showtime-btn" onclick="selectShowtime('02:15 PM')">02:15 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime('05:30 PM')">05:30 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime('09:00 PM')">09:00 PM</button>
+            </div>
+        </div>
+
+        <div class="theater-card">
+            <div class="theater-info">
+                <h3>Cinepolis - Forum Mall</h3>
+                <div class="theater-address">Koramangala, Bangalore • 8.1 km</div>
+                <div class="facilities">4DX • Premium Lounge • Valet Parking</div>
+            </div>
+            <div class="showtimes">
+                <button class="showtime-btn" onclick="selectShowtime('10:30 AM')">10:30 AM</button>
+                <button class="showtime-btn" onclick="selectShowtime('01:45 PM')">01:45 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime('05:00 PM')">05:00 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime('08:30 PM')">08:30 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime('11:45 PM')">11:45 PM</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="continue-btn" onclick="proceedToSeats()">Select Seats →</button>
+
+    <script>
+        let selectedShowtime = null;
+        let selectedTheater = null;
+
+        function selectShowtime(time) {
+            selectedShowtime = time;
+            // Remove active class from all buttons
+            document.querySelectorAll('.showtime-btn').forEach(btn => {
+                btn.style.background = 'rgba(0, 173, 181, 0.2)';
+            });
+            // Add active class to clicked button
+            event.target.style.background = '#00adb5';
+            
+            selectedTheater = event.target.closest('.theater-card').querySelector('h3').textContent;
+            
+            alert(`Selected: ${selectedTheater} at ${time}`);
+        }
+
+        function proceedToSeats() {
+            if (!selectedShowtime) {
+                alert('Please select a showtime first!');
+                return;
+            }
+            
+            // Save selection to localStorage
+            localStorage.setItem('selectedTheater', selectedTheater);
+            localStorage.setItem('selectedShowtime', selectedShowtime);
+            localStorage.setItem('selectedDate', document.querySelector('.date-item.active').textContent);
+            
+            // Redirect to seats page
+            window.location.href = 'seats.html';
+        }
+
+        // Date selection
+        document.querySelectorAll('.date-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.date-item').forEach(d => d.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Booking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c0c1d 0%, #1a1a2e 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: fit-content;
+            transition: 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #00adb5;
+            font-size: 42px;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00adb5, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header p {
+            color: #ccc;
+            font-size: 18px;
+        }
+        
+        .event-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 2px solid #00adb5;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #00adb5, #ff6b6b, #ffd93d);
+        }
+        
+        .event-title {
+            font-size: 32px;
+            color: #00adb5;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .event-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .detail-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: 0.3s;
+        }
+        
+        .detail-box:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .detail-icon {
+            font-size: 30px;
+            color: #00adb5;
+        }
+        
+        .detail-text h4 {
+            color: #ccc;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .detail-text p {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .section-title {
+            color: #00adb5;
+            margin: 30px 0 20px 0;
+            font-size: 24px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+        
+        .pass-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .pass-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pass-card:hover {
+            transform: translateY(-5px);
+            border-color: #00adb5;
+        }
+        
+        .pass-card.selected {
+            border-color: #00adb5;
+            background: rgba(0, 173, 181, 0.1);
+        }
+        
+        .pass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d);
+        }
+        
+        .pass-name {
+            font-size: 20px;
+            color: white;
+            margin-bottom: 10px;
+        }
+        
+        .pass-price {
+            font-size: 28px;
+            color: #00adb5;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .pass-features {
+            list-style: none;
+            font-size: 14px;
+            color: #ccc;
+            line-height: 1.6;
+        }
+        
+        .pass-quantity {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin: 30px 0;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .quantity-label {
+            font-size: 18px;
+            color: #ccc;
+        }
+        
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #00adb5;
+            color: white;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        
+        .quantity-btn:hover {
+            background: #0099a1;
+            transform: scale(1.1);
+        }
+        
+        .quantity-display {
+            font-size: 24px;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        .date-selection {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        
+        .date-option {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+            border: 2px solid transparent;
+        }
+        
+        .date-option:hover {
+            transform: translateY(-3px);
+            border-color: rgba(0, 173, 181, 0.5);
+        }
+        
+        .date-option.selected {
+            border-color: #00adb5;
+            background: rgba(0, 173, 181, 0.1);
+        }
+        
+        .date-day {
+            font-size: 18px;
+            color: #00adb5;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .date-date {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .date-month {
+            font-size: 14px;
+            color: #ccc;
+        }
+        
+        .book-btn {
+            background: linear-gradient(90deg, #00adb5, #ff6b6b);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .book-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 173, 181, 0.3);
+        }
+        
+        .total-amount {
+            text-align: center;
+            font-size: 28px;
+            color: #00adb5;
+            margin: 30px 0;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .event-card {
+                padding: 25px;
+            }
+            
+            .event-title {
+                font-size: 28px;
+            }
+            
+            .pass-types {
+                grid-template-columns: 1fr;
+            }
+            
+            .date-selection {
+                justify-content: center;
+            }
+            
+            .date-option {
+                min-width: 120px;
+            }
+            
+            .book-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-btn" onclick="window.history.back()">← Back</button>
+        
+        <div class="header">
+            <h1>Event Booking</h1>
+            <p>Reserve your spot at the most exciting event of the year</p>
+        </div>
+        
+        <div class="event-card">
+            <div class="event-title">Tech Summit 2024</div>
+            
+            <div class="event-details">
+                <div class="detail-box">
+                    <div class="detail-icon">📍</div>
+                    <div class="detail-text">
+                        <h4>Venue</h4>
+                        <p>Chennai Convention Center, Chennai</p>
+                    </div>
+                </div>
+                
+                <div class="detail-box">
+                    <div class="detail-icon">📅</div>
+                    <div class="detail-text">
+                        <h4>Duration</h4>
+                        <p>3 days</p>
+                    </div>
+                </div>
+                
+                <div class="detail-box">
+                    <div class="detail-icon">⏰</div>
+                    <div class="detail-text">
+                        <h4>Time</h4>
+                        <p>10:00 AM - 9:00 PM</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title">Select Pass Type:</div>
+            
+            <div class="pass-types">
+                <div class="pass-card" onclick="selectPass('single')" data-pass="single">
+                    <div class="pass-name">Single Day Pass</div>
+                    <div class="pass-price">₹499</div>
+                    <ul class="pass-features">
+                        <li>• Access to 1 day</li>
+                        <li>• Welcome Kit</li>
+                        <li>• Basic Sessions</li>
+                        <li>• Lunch Included</li>
+                    </ul>
+                </div>
+                
+                <div class="pass-card" onclick="selectPass('weekend')" data-pass="weekend">
+                    <div class="pass-name">Weekend Pass</div>
+                    <div class="pass-price">₹1299</div>
+                    <ul class="pass-features">
+                        <li>• Access to 2 days</li>
+                        <li>• Premium Kit</li>
+                        <li>• All Sessions</li>
+                        <li>• Food & Drinks</li>
+                    </ul>
+                </div>
+                
+                <div class="pass-card" onclick="selectPass('full')" data-pass="full">
+                    <div class="pass-name">Full Event Pass</div>
+                    <div class="pass-price">₹2499</div>
+                    <ul class="pass-features">
+                        <li>• Access to all 3 days</li>
+                        <li>• VIP Kit</li>
+                        <li>• All Sessions</li>
+                        <li>• Premium Dining</li>
+                        <li>• Networking Events</li>
+                    </ul>
+                </div>
+                
+                <div class="pass-card" onclick="selectPass('vip')" data-pass="vip">
+                    <div class="pass-name">VIP Pass</div>
+                    <div class="pass-price">₹4999</div>
+                    <ul class="pass-features">
+                        <li>• All 3 days + Afterparty</li>
+                        <li>• Exclusive VIP Kit</li>
+                        <li>• Backstage Access</li>
+                        <li>• Gourmet Dining</li>
+                        <li>• Speaker Meet & Greet</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pass-quantity">
+                <div class="quantity-label">Number of Passes:</div>
+                <div class="quantity-controls">
+                    <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                    <div class="quantity-display" id="quantity">1</div>
+                    <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                </div>
+            </div>
+            
+            <div class="section-title">Select Date:</div>
+            
+            <div class="date-selection" id="dateSelection">
+                <!-- Dates will be generated dynamically -->
+            </div>
+            
+            <div class="total-amount" id="totalAmount">Total: ₹0</div>
+            
+            <button class="book-btn" onclick="bookEvent()">Book Now →</button>
+        </div>
+    </div>
+
+    <script>
+        // Event booking data
+        let selectedPass = null;
+        let quantity = 1;
+        let selectedDate = null;
+        const passPrices = {
+            single: 499,
+            weekend: 1299,
+            full: 2499,
+            vip: 4999
+        };
+        
+        // Initialize the page
+        window.onload = function() {
+            generateDates();
+            updateTotal();
+        };
+        
+        // Generate dates for next 7 days
+        function generateDates() {
+            const dateSelection = document.getElementById('dateSelection');
+            dateSelection.innerHTML = '';
+            
+            const today = new Date();
+            const options = { weekday: 'short', month: 'short' };
+            
+            for (let i = 0; i < 7; i++) {
+                const date = new Date();
+                date.setDate(today.getDate() + i);
+                
+                const dateOption = document.createElement('div');
+                dateOption.className = 'date-option';
+                if (i === 0) {
+                    dateOption.classList.add('selected');
+                    selectedDate = 'Today';
+                }
+                
+                dateOption.innerHTML = `
+                    <div class="date-day">${i === 0 ? 'Today' : date.toLocaleDateString('en-US', { weekday: 'short' })}</div>
+                    <div class="date-date">${date.getDate()}</div>
+                    <div class="date-month">${date.toLocaleDateString('en-US', { month: 'short' })}</div>
+                `;
+                
+                dateOption.onclick = () => selectDate(dateOption, i === 0 ? 'Today' : formatDate(date));
+                dateSelection.appendChild(dateOption);
+            }
+        }
+        
+        // Format date for display
+        function formatDate(date) {
+            return `${date.toLocaleDateString('en-US', { weekday: 'short' })}, ${date.getDate()} ${date.toLocaleDateString('en-US', { month: 'short' })}`;
+        }
+        
+        // Select a pass type
+        function selectPass(passType) {
+            // Remove selected class from all passes
+            document.querySelectorAll('.pass-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked pass
+            const selectedCard = document.querySelector(`[data-pass="${passType}"]`);
+            selectedCard.classList.add('selected');
+            
+            selectedPass = passType;
+            updateTotal();
+        }
+        
+        // Change quantity
+        function changeQuantity(change) {
+            const newQuantity = quantity + change;
+            if (newQuantity >= 1 && newQuantity <= 10) {
+                quantity = newQuantity;
+                document.getElementById('quantity').textContent = quantity;
+                updateTotal();
+            }
+        }
+        
+        // Select a date
+        function selectDate(dateElement, date) {
+            // Remove selected class from all dates
+            document.querySelectorAll('.date-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked date
+            dateElement.classList.add('selected');
+            selectedDate = date;
+        }
+        
+        // Update total amount
+        function updateTotal() {
+            if (!selectedPass) {
+                document.getElementById('totalAmount').textContent = 'Total: ₹0';
+                return;
+            }
+            
+            const total = passPrices[selectedPass] * quantity;
+            document.getElementById('totalAmount').textContent = `Total: ₹${total}`;
+        }
+        
+        // Book event
+        function bookEvent() {
+            if (!selectedPass) {
+                alert('Please select a pass type');
+                return;
+            }
+            
+            if (!selectedDate) {
+                alert('Please select a date');
+                return;
+            }
+            
+            // Save booking details to localStorage
+            const bookingDetails = {
+                event: 'Tech Summit 2024',
+                passType: getPassName(selectedPass),
+                price: passPrices[selectedPass],
+                quantity: quantity,
+                total: passPrices[selectedPass] * quantity,
+                date: selectedDate,
+                venue: 'Chennai Convention Center, Chennai',
+                time: '10:00 AM - 9:00 PM'
+            };
+            
+            localStorage.setItem('eventBooking', JSON.stringify(bookingDetails));
+            
+            // Redirect to payment page
+            window.location.href = 'payment.html';
+        }
+        
+        // Get pass name for display
+        function getPassName(passType) {
+            const names = {
+                single: 'Single Day Pass',
+                weekend: 'Weekend Pass',
+                full: 'Full Event Pass',
+                vip: 'VIP Pass'
+            };
+            return names[passType];
+        }
+    </script>
+</body>
+</html>

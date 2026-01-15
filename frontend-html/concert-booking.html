@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Concert Ticket</title>
+</head>
+<body>
+    <h1>🎵 Concert Booking</h1>
+    
+    <div id="concertInfo">
+        <h2>Loading concert details...</h2>
+    </div>
+    
+    <h3>Select Ticket Type:</h3>
+    <div>
+        <button onclick="selectTicket('bronze')">Bronze - ₹999</button>
+        <button onclick="selectTicket('silver')">Silver - ₹1999</button>
+        <button onclick="selectTicket('gold')">Gold - ₹3999</button>
+    </div>
+    
+    <h3>Select Date:</h3>
+    <select id="dateSelect">
+        <option>Jan 15, 2024</option>
+        <option>Jan 16, 2024</option>
+    </select>
+    
+    <br><br>
+    <button onclick="bookConcert()">Book Now</button>
+    
+    <script>
+        // Get concert name from URL or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const concertName = urlParams.get('name') || localStorage.getItem('concertName') || 'AR Rahman Live';
+        
+        document.getElementById('concertInfo').innerHTML = `
+            <h2>${concertName}</h2>
+            <p>Venue: Jawaharlal Nehru Stadium, Chennai</p>
+        `;
+        
+        let selectedTicket = '';
+        
+        function selectTicket(type) {
+            selectedTicket = type;
+            alert(`Selected ${type} ticket`);
+        }
+        
+        function bookConcert() {
+            if (!selectedTicket) {
+                alert('Please select a ticket type!');
+                return;
+            }
+            
+            const date = document.getElementById('dateSelect').value;
+            
+            // Save to localStorage
+            localStorage.setItem('bookingType', 'concert');
+            localStorage.setItem('eventName', concertName);
+            localStorage.setItem('ticketType', selectedTicket);
+            localStorage.setItem('eventDate', date);
+            localStorage.setItem('venue', 'Jawaharlal Nehru Stadium, Chennai');
+            
+            // Go to payment
+            window.location.href = 'payment.html';
+        }
+    </script>
+</body>
+</html>

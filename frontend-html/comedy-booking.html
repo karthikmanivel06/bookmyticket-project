@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Comedy Show</title>
+</head>
+<body>
+    <h1>😂 Comedy Show Booking</h1>
+    
+    <div id="comedyInfo">
+        <h2>Loading show details...</h2>
+    </div>
+    
+    <h3>Select Ticket Type:</h3>
+    <div>
+        <button onclick="selectTicket('regular')">Regular - ₹299</button>
+        <button onclick="selectTicket('premium')">Premium - ₹599</button>
+        <button onclick="selectTicket('vip')">VIP Front Row - ₹999</button>
+        <button onclick="selectTicket('table')">Table for 4 - ₹3499</button>
+    </div>
+    
+    <h3>Number of Tickets:</h3>
+    <input type="number" id="ticketCount" min="1" max="10" value="1">
+    
+    <h3>Select Show Time:</h3>
+    <select id="timeSelect">
+        <option>7:00 PM (Early Show)</option>
+        <option>9:30 PM (Prime Time)</option>
+        <option>11:00 PM (Late Night)</option>
+    </select>
+    
+    <br><br>
+    <button onclick="bookComedy()">Book Now</button>
+    <br><br>
+    <button onclick="window.history.back()">← Back</button>
+    
+    <script>
+        // Get comedy show name from URL or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const comedyName = urlParams.get('name') || localStorage.getItem('comedyName') || 'Standup Chennai';
+        
+        // Set venue based on comedy type
+        let venue = 'Sir Mutha Venkatasubba Rao Hall';
+        if (comedyName.includes('Tamil')) venue = 'Phoenix Marketcity';
+        if (comedyName.includes('Improv')) venue = 'The Boardwalk, Adyar';
+        if (comedyName.includes('Cellar')) venue = 'The Leela Palace';
+        
+        document.getElementById('comedyInfo').innerHTML = `
+            <h2>${comedyName}</h2>
+            <p>📍 Venue: ${venue}, Chennai</p>
+            <p>🎤 Language: ${comedyName.includes('Tamil') ? 'Tamil' : 'English'}</p>
+            <p>⏰ Duration: 2 hours</p>
+        `;
+        
+        let selectedTicket = '';
+        
+        function selectTicket(ticketType) {
+            selectedTicket = ticketType;
+            const prices = {
+                'regular': '₹299',
+                'premium': '₹599', 
+                'vip': '₹999',
+                'table': '₹3499'
+            };
+            alert(`Selected ${ticketType} ticket - ${prices[ticketType]}`);
+        }
+        
+        function bookComedy() {
+            if (!selectedTicket) {
+                alert('Please select a ticket type!');
+                return;
+            }
+            
+            const count = document.getElementById('ticketCount').value;
+            const time = document.getElementById('timeSelect').value;
+            
+            // Save to localStorage
+            localStorage.setItem('bookingType', 'comedy');
+            localStorage.setItem('comedyName', comedyName);
+            localStorage.setItem('ticketType', selectedTicket);
+            localStorage.setItem('ticketCount', count);
+            localStorage.setItem('showTime', time);
+            localStorage.setItem('venue', venue);
+            
+            // Calculate price
+            const prices = {regular: 299, premium: 599, vip: 999, table: 3499};
+            const total = prices[selectedTicket] * count;
+            localStorage.setItem('totalAmount', total);
+            
+            // Go to payment
+            window.location.href = 'payment.html';
+        }
+    </script>
+</body>
+</html>

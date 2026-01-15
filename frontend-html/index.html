@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookMyTicket - Movie Booking Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: #0f172a;
+            color: white;
+        }
+        
+        .movie-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid #334155;
+            overflow: hidden;
+        }
+        
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+            border-color: #3b82f6;
+        }
+        
+        .event-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid #334155;
+            overflow: hidden;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            border-color: #3b82f6;
+        }
+        
+        .movie-poster {
+            height: 300px;
+            width: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .movie-card:hover .movie-poster {
+            transform: scale(1.05);
+        }
+        
+        .event-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+        }
+        
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            z-index: 10;
+        }
+        
+        .now-showing {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .upcoming {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        .rating-badge {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            color: #000;
+            font-weight: bold;
+        }
+        
+        .language-badge {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid #3b82f6;
+            color: #3b82f6;
+        }
+        
+        .concert-badge {
+            background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+        }
+        
+        .sports-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .event-badge {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+        
+        .comedy-badge {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+        
+        /* Event Category Tags */
+        .category-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .concert-tag {
+            background: rgba(236, 72, 153, 0.2);
+            color: #ec4899;
+            border: 1px solid #ec4899;
+        }
+        
+        .sports-tag {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid #10b981;
+        }
+        
+        .event-tag {
+            background: rgba(139, 92, 246, 0.2);
+            color: #8b5cf6;
+            border: 1px solid #8b5cf6;
+        }
+        
+        .comedy-tag {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid #f59e0b;
+        }
+        
+        /* Section Tabs */
+        .section-tabs {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 0;
+            margin-bottom: 20px;
+        }
+        
+        .section-tab {
+            padding: 12px 24px;
+            margin-right: 10px;
+            background: #1e293b;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+            border: 2px solid transparent;
+        }
+        
+        .section-tab.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            border-color: #60a5fa;
+        }
+        
+        .section-tab:hover:not(.active) {
+            background: #334155;
+        }
+        
+        /* Hide/Show Sections */
+        .section-content {
+            display: none;
+        }
+        
+        .section-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-gradient-to-r from-gray-900 to-gray-950 border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-red-500 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-ticket-alt text-2xl text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">BookMyTicket</h1>
+                        <p class="text-sm text-gray-400">Movies • Concerts • Sports • Events</p>
+                    </div>
+                </div>
+                
+                <!-- Navigation -->
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex space-x-4">
+                        <a href="#" class="px-4 py-2 text-gray-300 hover:text-white transition" onclick="showSection('movies')">Movies</a>
+                        <a href="#" class="px-4 py-2 text-gray-300 hover:text-white transition" onclick="showSection('concerts')">Concerts</a>
+                        <a href="#" class="px-4 py-2 text-gray-300 hover:text-white transition" onclick="showSection('sports')">Sports</a>
+                        <a href="#" class="px-4 py-2 text-gray-300 hover:text-white transition" onclick="showSection('events')">Events</a>
+                        <a href="#" class="px-4 py-2 text-gray-300 hover:text-white transition" onclick="showSection('comedy')">Comedy</a>
+                    </div>
+                    
+                    <!-- User Actions -->
+                    <div class="flex items-center space-x-3">
+                        <div class="relative">
+                            <button class="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg transition flex items-center">
+                                <i class="fas fa-map-marker-alt mr-2 text-blue-400"></i>
+                                <span>Chennai</span>
+                                <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                            </button>
+                        </div>
+                        <button onclick="window.location.href='login.html'" class="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg font-medium transition">
+                            <i class="fas fa-user mr-2"></i>Login
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Search -->
+    <div class="bg-gradient-to-r from-gray-900 to-gray-950 py-8 border-b border-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mx-auto">
+                <div class="relative">
+                    <input type="text" 
+                           placeholder="Search for movies, concerts, sports, or events..." 
+                           class="w-full px-6 py-4 pl-14 bg-gray-800 border border-gray-700 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           id="searchInput">
+                    <i class="fas fa-search absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <button onclick="searchContent()" class="absolute right-2 top-1/2 transform -translate-y-1/2 px-6 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white rounded-xl font-medium transition">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Section Tabs -->
+        <div class="mb-8">
+            <div class="section-tabs">
+                <div class="section-tab active" onclick="showSection('movies')">
+                    <i class="fas fa-film mr-2"></i>Movies
+                </div>
+                <div class="section-tab" onclick="showSection('concerts')">
+                    <i class="fas fa-music mr-2"></i>Concerts
+                </div>
+                <div class="section-tab" onclick="showSection('sports')">
+                    <i class="fas fa-futbol mr-2"></i>Sports
+                </div>
+                <div class="section-tab" onclick="showSection('events')">
+                    <i class="fas fa-calendar-alt mr-2"></i>Events
+                </div>
+                <div class="section-tab" onclick="showSection('comedy')">
+                    <i class="fas fa-laugh mr-2"></i>Comedy
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== MOVIES SECTION ===== -->
+        <div id="movies-section" class="section-content active">
+            <!-- Stats & Filters -->
+            <div class="mb-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                    <h2 class="text-3xl font-bold mb-4 md:mb-0">
+                        <i class="fas fa-film mr-3 text-blue-400"></i>
+                        Now Showing in Chennai Theaters
+                    </h2>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="text-sm text-gray-400">
+                            <i class="fas fa-database mr-1"></i>
+                            <span id="movieCount">Loading...</span> movies
+                        </div>
+                        <div class="text-sm text-green-400">
+                            <i class="fas fa-circle mr-1"></i>
+                            Backend Connected
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Filter Buttons -->
+                <div class="flex flex-wrap gap-3 mb-8 overflow-x-auto pb-4">
+                    <button onclick="filterMovies('all')" class="filter-btn active px-6 py-3 rounded-xl font-medium transition">
+                        <i class="fas fa-globe mr-2"></i>All Movies
+                    </button>
+                    <button onclick="filterMovies('Tamil')" class="filter-btn px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-xl font-medium transition">
+                        <i class="fas fa-star mr-2"></i>Tamil
+                    </button>
+                    <button onclick="filterMovies('Hindi')" class="filter-btn px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-xl font-medium transition">
+                        <i class="fas fa-bolt mr-2"></i>Hindi
+                    </button>
+                    <button onclick="filterMovies('English')" class="filter-btn px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-xl font-medium transition">
+                        <i class="fas fa-film mr-2"></i>English
+                    </button>
+                    <button onclick="filterMovies('upcoming')" class="filter-btn px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-xl font-medium transition">
+                        <i class="fas fa-calendar mr-2"></i>Upcoming
+                    </button>
+                    <button onclick="filterMovies('trending')" class="filter-btn px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-xl font-medium transition">
+                        <i class="fas fa-fire mr-2"></i>Trending
+                    </button>
+                </div>
+            </div>
+
+            <!-- Movies Grid -->
+            <div id="moviesContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                <!-- Loading Skeleton -->
+                <div class="col-span-5 text-center py-12">
+                    <div class="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500"></div>
+                    <p class="mt-4 text-gray-400 text-lg">Loading movies from database...</p>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-gradient-to-br from-blue-900 to-blue-800 p-6 rounded-2xl">
+                    <div class="text-3xl font-bold" id="totalMovies">0</div>
+                    <div class="text-gray-300">Total Movies</div>
+                </div>
+                <div class="bg-gradient-to-br from-purple-900 to-purple-800 p-6 rounded-2xl">
+                    <div class="text-3xl font-bold" id="tamilMovies">0</div>
+                    <div class="text-gray-300">Tamil Movies</div>
+                </div>
+                <div class="bg-gradient-to-br from-green-900 to-green-800 p-6 rounded-2xl">
+                    <div class="text-3xl font-bold" id="hindiMovies">0</div>
+                    <div class="text-gray-300">Hindi Movies</div>
+                </div>
+                <div class="bg-gradient-to-br from-red-900 to-red-800 p-6 rounded-2xl">
+                    <div class="text-3xl font-bold" id="englishMovies">0</div>
+                    <div class="text-gray-300">English Movies</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== CONCERTS SECTION ===== -->
+        <div id="concerts-section" class="section-content">
+            <div class="mb-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                    <h2 class="text-3xl font-bold mb-4 md:mb-0">
+                        <i class="fas fa-music mr-3 text-pink-400"></i>
+                        Upcoming Concerts in Chennai
+                    </h2>
+                    <div class="text-sm text-gray-400">
+                        <i class="fas fa-map-marker-alt mr-1"></i> Live events at stadiums & arenas
+                    </div>
+                </div>
+            </div>
+
+            <!-- Concerts Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="concertsContainer">
+                <!-- Concert 1 -->
+                <div class="event-card rounded-2xl overflow-hidden relative">
+                    <div class="status-badge concert-badge">
+                        <i class="fas fa-music mr-1"></i> CONCERT
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="AR Rahman Concert" class="event-image">
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold mb-2">AR Rahman Live</h3>
+                        <div class="flex flex-wrap mb-3">
+                            <span class="concert-tag category-tag">Music</span>
+                            <span class="concert-tag category-tag">Bollywood</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">The Maestro returns to Chennai for a spectacular night of music</p>
+                        <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                            <div>
+                                <i class="fas fa-map-marker-alt mr-1"></i> Nehru Stadium
+                            </div>
+                            <div>
+                                <i class="fas fa-calendar mr-1"></i> Dec 30
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-xl font-bold text-yellow-400">
+                                ₹999 <span class="text-sm text-gray-400">onwards</span>
+                            </div>
+                            <button onclick="bookEvent('concert', 'AR Rahman Live')" 
+                                    class="px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 rounded-lg font-medium text-sm">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Concert 2 -->
+                <div class="event-card rounded-2xl overflow-hidden relative">
+                    <div class="status-badge concert-badge">
+                        <i class="fas fa-music mr-1"></i> CONCERT
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Anirudh Concert" class="event-image">
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold mb-2">Anirudh: Hukum Tour</h3>
+                        <div class="flex flex-wrap mb-3">
+                            <span class="concert-tag category-tag">Tollywood</span>
+                            <span class="concert-tag category-tag">Live</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">Experience the magic of Tamil cinema's favorite music director</p>
+                        <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                            <div>
+                                <i class="fas fa-map-marker-alt mr-1"></i> Jawaharlal Nehru Stadium
+                            </div>
+                            <div>
+                                <i class="fas fa-calendar mr-1"></i> Jan 15
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-xl font-bold text-yellow-400">
+                                ₹799 <span class="text-sm text-gray-400">onwards</span>
+                            </div>
+                            <button onclick="bookEvent('concert', 'Anirudh Concert')" 
+                                    class="px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 rounded-lg font-medium text-sm">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Concert 3 -->
+                <div class="event-card rounded-2xl overflow-hidden relative">
+                    <div class="status-badge concert-badge">
+                        <i class="fas fa-music mr-1"></i> CONCERT
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1501618669935-18b6ecb13d6d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Coke Studio" class="event-image">
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold mb-2">Coke Studio India Live</h3>
+                        <div class="flex flex-wrap mb-3">
+                            <span class="concert-tag category-tag">Multi-Genre</span>
+                            <span class="concert-tag category-tag">Fusion</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">India's biggest music platform comes alive in Chennai</p>
+                        <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                            <div>
+                                <i class="fas fa-map-marker-alt mr-1"></i> YMCA Grounds
+                            </div>
+                            <div>
+                                <i class="fas fa-calendar mr-1"></i> Jan 20
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-xl font-bold text-yellow-400">
+                                ₹1499 <span class="text-sm text-gray-400">onwards</span>
+                            </div>
+                            <button onclick="bookEvent('concert', 'Coke Studio')" 
+                                    class="px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 rounded-lg font-medium text-sm">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Concert 4 -->
+                <div class="event-card rounded-2xl overflow-hidden relative">
+                    <div class="status-badge concert-badge">
+                        <i class="fas fa-music mr-1"></i> CONCERT
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Eminem Concert" class="event-image">
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold mb-2">International Rock Fest</h3>
+                        <div class="flex flex-wrap mb-3">
+                            <span class="concert-tag category-tag">Rock</span>
+                            <span class="concert-tag category-tag">International</span>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">Featuring international artists across rock genres</p>
+                        <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                            <div>
+                                <i class="fas fa-map-marker-alt mr-1"></i> Chennai Trade Centre
+                            </div>
+                            <div>
+                                <i class="fas fa-calendar mr-1"></i> Feb 5
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-xl font-bold text-yellow-400">
+                                ₹2999 <span class="text-sm text-gray-400">onwards</span>
+                            </div>
+                            <button onclick="bookEvent('concert', 'Rock Fest')" 
+                                    class="px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 rounded-lg font-medium text-sm">
+                                Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+<!-- Replace these sections in your existing code -->
+
+<!-- ===== SPORTS SECTION - UPDATED ===== -->
+<div id="sports-section" class="section-content">
+    <div class="mb-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+            <h2 class="text-3xl font-bold mb-4 md:mb-0">
+                <i class="fas fa-futbol mr-3 text-green-400"></i>
+                Sports Events in Chennai
+            </h2>
+            <div class="text-sm text-gray-400">
+                <i class="fas fa-running mr-1"></i> Live matches & tournaments
+            </div>
+        </div>
+    </div>
+
+    <!-- Sports Grid - UPDATED WITH PROPER IMAGES -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="sportsContainer">
+        <!-- Sport 1 - Cricket (KEEP SAME) -->
+        <div class="event-card rounded-2xl overflow-hidden relative">
+            <div class="status-badge sports-badge">
+                <i class="fas fa-cricket mr-1"></i> CRICKET
+            </div>
+            <img src="https://images.unsplash.com/photo-1531415074968-036ba1b575da?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="IPL Cricket" class="event-image">
+            <div class="p-5">
+                <h3 class="text-lg font-bold mb-2">IPL 2024 - CSK vs MI</h3>
+                <div class="flex flex-wrap mb-3">
+                    <span class="sports-tag category-tag">Cricket</span>
+                    <span class="sports-tag category-tag">IPL</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">Chennai Super Kings vs Mumbai Indians at Chepauk</p>
+                <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                    <div>
+                        <i class="fas fa-map-marker-alt mr-1"></i> M.A. Chidambaram Stadium
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar mr-1"></i> Apr 10
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-xl font-bold text-yellow-400">
+                        ₹1500 <span class="text-sm text-gray-400">onwards</span>
+                    </div>
+                    <button onclick="bookEvent('sports', 'CSK vs MI')" 
+                            class="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-lg font-medium text-sm">
+                        Book Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sport 2 - FOOTBALL (UPDATED IMAGE) -->
+        <div class="event-card rounded-2xl overflow-hidden relative">
+            <div class="status-badge sports-badge">
+                <i class="fas fa-futbol mr-1"></i> FOOTBALL
+            </div>
+            <img src="https://images.unsplash.com/photo-1575361204480-aadea25e6e68?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Football Match" class="event-image">
+            <div class="p-5">
+                <h3 class="text-lg font-bold mb-2">ISL: Chennaiyin FC vs Bengaluru FC</h3>
+                <div class="flex flex-wrap mb-3">
+                    <span class="sports-tag category-tag">Football</span>
+                    <span class="sports-tag category-tag">ISL</span>
+                    <span class="sports-tag category-tag">Derby</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">Chennaiyin FC vs Bengaluru FC - South Indian Derby at Jawaharlal Nehru Stadium</p>
+                <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                    <div>
+                        <i class="fas fa-map-marker-alt mr-1"></i> Jawaharlal Nehru Stadium
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar mr-1"></i> Dec 28, 7:30 PM
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-xl font-bold text-yellow-400">
+                        ₹800 <span class="text-sm text-gray-400">onwards</span>
+                    </div>
+                    <button onclick="bookEvent('sports', 'Chennaiyin FC Match')" 
+                            class="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-lg font-medium text-sm">
+                        Book Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sport 3 - TENNIS (UPDATED IMAGE) -->
+        <div class="event-card rounded-2xl overflow-hidden relative">
+            <div class="status-badge sports-badge">
+                <i class="fas fa-baseball mr-1"></i> TENNIS
+            </div>
+            <img src="https://images.unsplash.com/photo-1595341888016-a392ef81b7de?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Tennis Match" class="event-image">
+            <div class="p-5">
+                <h3 class="text-lg font-bold mb-2">Chennai Open Tennis 2024</h3>
+                <div class="flex flex-wrap mb-3">
+                    <span class="sports-tag category-tag">Tennis</span>
+                    <span class="sports-tag category-tag">ATP 250</span>
+                    <span class="sports-tag category-tag">International</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">ATP 250 Tournament featuring top international tennis stars at SDAT Stadium</p>
+                <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                    <div>
+                        <i class="fas fa-map-marker-alt mr-1"></i> SDAT Tennis Stadium, Nungambakkam
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar mr-1"></i> Jan 5-12, 2024
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-xl font-bold text-yellow-400">
+                        ₹1200 <span class="text-sm text-gray-400">onwards</span>
+                    </div>
+                    <button onclick="bookEvent('sports', 'Chennai Open Tennis')" 
+                            class="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-lg font-medium text-sm">
+                        Book Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sport 4 - Basketball (KEEP SAME) -->
+        <div class="event-card rounded-2xl overflow-hidden relative">
+            <div class="status-badge sports-badge">
+                <i class="fas fa-basketball mr-1"></i> BASKETBALL
+            </div>
+            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Basketball Match" class="event-image">
+            <div class="p-5">
+                <h3 class="text-lg font-bold mb-2">Pro Basketball League</h3>
+                <div class="flex flex-wrap mb-3">
+                    <span class="sports-tag category-tag">Basketball</span>
+                    <span class="sports-tag category-tag">PBL</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">Chennai Slam vs Delhi Capitals - National Championship</p>
+                <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                    <div>
+                        <i class="fas fa-map-marker-alt mr-1"></i> Jawaharlal Nehru Stadium
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar mr-1"></i> Jan 25
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-xl font-bold text-yellow-400">
+                        ₹600 <span class="text-sm text-gray-400">onwards</span>
+                    </div>
+                    <button onclick="bookEvent('sports', 'Basketball')" 
+                            class="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-lg font-medium text-sm">
+                        Book Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== EVENTS SECTION - UPDATED ===== -->
+<div id="events-section" class="section-content">
+    <div class="mb-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+            <h2 class="text-3xl font-bold mb-4 md:mb-0">
+                <i class="fas fa-calendar-alt mr-3 text-purple-400"></i>
+                Special Events in Chennai
+            </h2>
+            <div class="text-sm text-gray-400">
+                <i class="fas fa-star mr-1"></i> Theater, Food, Cultural & More
+            </div>
+        </div>
+    </div>
+
+    <!-- Events Grid - UPDATED WITH PROPER IMAGES -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="eventsContainer">
+        <!-- Event 1 - Theater (KEEP SAME) -->
+        <div class="event-card rounded-2xl overflow-hidden relative">
+            <div class="status-badge event-badge">
+                <i class="fas fa-theater-masks mr-1"></i> THEATER
+            </div>
+            <img src="https://images.unsplash.com/photo-1514306191717-452ec28c7814?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Drama Play" class="event-image">
+            <div class="p-5">
+                <h3 class="text-lg font-bold mb-2">Shakespeare in Chennai</h3>
+                <div class="flex flex-wrap mb-3">
+                    <span class="event-tag category-tag">Drama</span>
+                    <span class="event-tag category-tag">Classical</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">Modern adaptation of Macbeth by Theatre Nisha</p>
+                <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                    <div>
+                        <i class="fas fa-map-marker-alt mr-1"></i> Museum Theatre, Egmore
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar mr-1"></i> Jan 18
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-xl font-bold text-yellow-400">
+                        ₹399 <span class="text-sm text-gray-400">onwards</span>
+                    </div>
+                    <button onclick="bookEvent('event', 'Shakespeare Play')" 
+                            class="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-lg font-medium text-sm">
+                        Book Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event 2 - Food Festival (KEEP SAME) -->
+        <div class="event-card rounded-2xl overflow-hidden relative">
+            <div class="status-badge event-badge">
+                <i class="fas fa-utensils mr-1"></i> FOOD FESTIVAL
+            </div>
+            <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Food Festival" class="event-image">
+            <div class="p-5">
+                <h3 class="text-lg font-bold mb-2">Chennai Food Festival</h3>
+                <div class="flex flex-wrap mb-3">
+                    <span class="event-tag category-tag">Food</span>
+                    <span class="event-tag category-tag">Festival</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">100+ Food Stalls, Live Cooking, Celebrity Chefs</p>
+                <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                    <div>
+                        <i class="fas fa-map-marker-alt mr-1"></i> Island Grounds
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar mr-1"></i> Jan 6-8
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-xl font-bold text-yellow-400">
+                        ₹199 <span class="text-sm text-gray-400">entry</span>
+                    </div>
+                    <button onclick="bookEvent('event', 'Food Festival')" 
+                            class="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-lg font-medium text-sm">
+                        Book Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event 3 - WORKSHOP (UPDATED IMAGE) -->
+        <div class="event-card rounded-2xl overflow-hidden relative">
+            <div class="status-badge event-badge">
+                <i class="fas fa-graduation-cap mr-1"></i> WORKSHOP
+            </div>
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Tech Workshop" class="event-image">
+            <div class="p-5">
+                <h3 class="text-lg font-bold mb-2">AI & Tech Summit 2024</h3>
+                <div class="flex flex-wrap mb-3">
+                    <span class="event-tag category-tag">Technology</span>
+                    <span class="event-tag category-tag">Workshop</span>
+                    <span class="event-tag category-tag">AI/ML</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">Latest trends in AI, Machine Learning & Blockchain with hands-on sessions</p>
+                <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                    <div>
+                        <i class="fas fa-map-marker-alt mr-1"></i> Chennai Convention Center, Nandanam
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar mr-1"></i> Feb 15-17, 9 AM - 6 PM
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-xl font-bold text-yellow-400">
+                        ₹2999 <span class="text-sm text-gray-400">3-day pass</span>
+                    </div>
+                    <button onclick="bookEvent('event', 'AI Summit Workshop')" 
+                            class="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-lg font-medium text-sm">
+                        Book Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event 4 - Art Exhibition (KEEP SAME) -->
+        <div class="event-card rounded-2xl overflow-hidden relative">
+            <div class="status-badge event-badge">
+                <i class="fas fa-paint-brush mr-1"></i> ART EXHIBITION
+            </div>
+            <img src="https://images.unsplash.com/photo-1563089145-599997674d42?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Art Exhibition" class="event-image">
+            <div class="p-5">
+                <h3 class="text-lg font-bold mb-2">Chennai Art Festival</h3>
+                <div class="flex flex-wrap mb-3">
+                    <span class="event-tag category-tag">Art</span>
+                    <span class="event-tag category-tag">Exhibition</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">Contemporary art exhibition featuring 50+ artists</p>
+                <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                    <div>
+                        <i class="fas fa-map-marker-alt mr-1"></i> Lalit Kala Akademi
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar mr-1"></i> Jan 22-28
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-xl font-bold text-yellow-400">
+                        Free <span class="text-sm text-gray-400">Entry</span>
+                    </div>
+                    <button onclick="bookEvent('event', 'Art Festival')" 
+                            class="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-lg font-medium text-sm">
+                        Book Pass
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== COMEDY SECTION - UPDATED ===== -->
+<div id="comedy-section" class="section-content">
+    <div class="mb-8">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+            <h2 class="text-3xl font-bold mb-4 md:mb-0">
+                <i class="fas fa-laugh mr-3 text-yellow-400"></i>
+                Comedy Shows in Chennai
+            </h2>
+            <div class="text-sm text-gray-400">
+                <i class="fas fa-microphone-alt mr-1"></i> Standup, Improv & Satire
+            </div>
+        </div>
+    </div>
+
+    <!-- Comedy Grid - UPDATED WITH PROPER IMAGES -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="comedyContainer">
+        <!-- Comedy 1 - Standup (KEEP SAME) -->
+        <div class="event-card rounded-2xl overflow-hidden relative">
+            <div class="status-badge comedy-badge">
+                <i class="fas fa-microphone mr-1"></i> STANDUP
+            </div>
+            <img src="https://images.unsplash.com/photo-1545239351-ef35f43d514b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Standup Comedy" class="event-image">
+            <div class="p-5">
+                <h3 class="text-lg font-bold mb-2">Standup Chennai</h3>
+                <div class="flex flex-wrap mb-3">
+                    <span class="comedy-tag category-tag">Standup</span>
+                    <span class="comedy-tag category-tag">English</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">Featuring Kenny Sebastian, Zakir Khan & Local Comedians</p>
+                <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                    <div>
+                        <i class="fas fa-map-marker-alt mr-1"></i> Sir Mutha Venkatasubba Rao Hall
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar mr-1"></i> Jan 12
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-xl font-bold text-yellow-400">
+                        ₹499 <span class="text-sm text-gray-400">onwards</span>
+                    </div>
+                    <button onclick="bookEvent('comedy', 'Standup Chennai')" 
+                            class="px-4 py-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 rounded-lg font-medium text-sm">
+                        Book Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comedy 2 - Tamil Comedy (KEEP SAME) -->
+        <div class="event-card rounded-2xl overflow-hidden relative">
+            <div class="status-badge comedy-badge">
+                <i class="fas fa-laugh-beam mr-1"></i> COMEDY
+            </div>
+            <img src="https://images.unsplash.com/photo-1500993855538-c6a99f437aa7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Comedy Club" class="event-image">
+            <div class="p-5">
+                <h3 class="text-lg font-bold mb-2">Tamil Comedy Night</h3>
+                <div class="flex flex-wrap mb-3">
+                    <span class="comedy-tag category-tag">Tamil</span>
+                    <span class="comedy-tag category-tag">Local</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">Best of Tamil standup comedy with popular local comedians</p>
+                <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                    <div>
+                        <i class="fas fa-map-marker-alt mr-1"></i> Phoenix Marketcity
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar mr-1"></i> Jan 19
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-xl font-bold text-yellow-400">
+                        ₹349 <span class="text-sm text-gray-400">onwards</span>
+                    </div>
+                    <button onclick="bookEvent('comedy', 'Tamil Comedy')" 
+                            class="px-4 py-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 rounded-lg font-medium text-sm">
+                        Book Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comedy 3 - IMPROV COMEDY JAM (UPDATED IMAGE) -->
+        <div class="event-card rounded-2xl overflow-hidden relative">
+            <div class="status-badge comedy-badge">
+                <i class="fas fa-users mr-1"></i> IMPROV
+            </div>
+            <img src="https://images.unsplash.com/photo-1507676184212-d03ab07a01bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Improv Comedy" class="event-image">
+            <div class="p-5">
+                <h3 class="text-lg font-bold mb-2">Improv Comedy Jam</h3>
+                <div class="flex flex-wrap mb-3">
+                    <span class="comedy-tag category-tag">Improv</span>
+                    <span class="comedy-tag category-tag">Interactive</span>
+                    <span class="comedy-tag category-tag">Audience</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">Audience participation comedy with quick-witted improvisers. Every Friday night!</p>
+                <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                    <div>
+                        <i class="fas fa-map-marker-alt mr-1"></i> The Boardwalk, Adyar
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar mr-1"></i> Every Friday, 8 PM
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-xl font-bold text-yellow-400">
+                        ₹299 <span class="text-sm text-gray-400">onwards</span>
+                    </div>
+                    <button onclick="bookEvent('comedy', 'Improv Comedy Jam')" 
+                            class="px-4 py-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 rounded-lg font-medium text-sm">
+                        Book Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comedy 4 - Premium Comedy (KEEP SAME) -->
+        <div class="event-card rounded-2xl overflow-hidden relative">
+            <div class="status-badge comedy-badge">
+                <i class="fas fa-crown mr-1"></i> PREMIUM
+            </div>
+            <img src="https://images.unsplash.com/photo-1516223725307-6f76b9ec8742?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                 alt="Premium Comedy" class="event-image">
+            <div class="p-5">
+                <h3 class="text-lg font-bold mb-2">Comedy Cellar Chennai</h3>
+                <div class="flex flex-wrap mb-3">
+                    <span class="comedy-tag category-tag">Premium</span>
+                    <span class="comedy-tag category-tag">All-Star</span>
+                </div>
+                <p class="text-gray-400 text-sm mb-4">Intimate comedy club experience with top national comedians</p>
+                <div class="flex justify-between items-center text-sm text-gray-400 mb-4">
+                    <div>
+                        <i class="fas fa-map-marker-alt mr-1"></i> The Leela Palace
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar mr-1"></i> Jan 26
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="text-xl font-bold text-yellow-400">
+                        ₹999 <span class="text-sm text-gray-400">onwards</span>
+                    </div>
+                    <button onclick="bookEvent('comedy', 'Comedy Cellar')" 
+                            class="px-4 py-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 rounded-lg font-medium text-sm">
+                        Book Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 border-t border-gray-800 mt-12">
+        <div class="container mx-auto px-6 py-10">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">BookMyTicket</h3>
+                    <p class="text-gray-400">Your ultimate destination for movie, concert, sports & event ticket booking in Chennai.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Categories</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" onclick="showSection('movies')" class="hover:text-white transition">Movies</a></li>
+                        <li><a href="#" onclick="showSection('concerts')" class="hover:text-white transition">Concerts</a></li>
+                        <li><a href="#" onclick="showSection('sports')" class="hover:text-white transition">Sports</a></li>
+                        <li><a href="#" onclick="showSection('events')" class="hover:text-white transition">Events</a></li>
+                        <li><a href="#" onclick="showSection('comedy')" class="hover:text-white transition">Comedy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Venues in Chennai</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>PVR Cinemas</li>
+                        <li>INOX</li>
+                        <li>M.A. Chidambaram Stadium</li>
+                        <li>Jawaharlal Nehru Stadium</li>
+                        <li>Nehru Indoor Stadium</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Contact</h4>
+                    <p class="text-gray-400">support@bookmyticket.com</p>
+                    <p class="text-gray-400">044-12345678</p>
+                    <div class="flex space-x-4 mt-4">
+                        <i class="fab fa-facebook text-gray-400 hover:text-blue-500 cursor-pointer"></i>
+                        <i class="fab fa-twitter text-gray-400 hover:text-blue-400 cursor-pointer"></i>
+                        <i class="fab fa-instagram text-gray-400 hover:text-pink-500 cursor-pointer"></i>
+                        <i class="fab fa-youtube text-gray-400 hover:text-red-500 cursor-pointer"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
+                <p>© 2024 BookMyTicket. All rights reserved. | Currently serving: Chennai only | Backend: Node.js + Express + MySQL</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== SECTION NAVIGATION =====
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active from all tabs
+            document.querySelectorAll('.section-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(`${sectionId}-section`).classList.add('active');
+            
+            // Update active tab
+            document.querySelectorAll('.section-tab').forEach(tab => {
+                if (tab.textContent.includes(sectionId.charAt(0).toUpperCase() + sectionId.slice(1))) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            // Update navigation links
+            document.querySelectorAll('.nav-tabs a').forEach(link => {
+                link.classList.remove('text-white');
+                link.classList.add('text-gray-300');
+            });
+            
+            event.target.classList.remove('text-gray-300');
+            event.target.classList.add('text-white');
+        }
+
+        // ===== MOVIES FUNCTIONS (Keep your existing code) =====
+        let allMovies = [];
+        let currentFilter = 'all';
+
+        async function loadMovies() {
+            try {
+                const response = await fetch('http://localhost:5001/api/movies');
+                allMovies = await response.json();
+                
+                // Update stats
+                updateStats();
+                
+                // Display all movies initially
+                displayMovies(allMovies);
+                
+            } catch (error) {
+                document.getElementById('moviesContainer').innerHTML = `
+                    <div class="col-span-5 text-center py-12 bg-red-900/20 rounded-2xl">
+                        <i class="fas fa-exclamation-triangle text-5xl text-red-500 mb-4"></i>
+                        <h3 class="text-2xl font-bold text-red-400 mb-3">Connection Error</h3>
+                        <p class="text-gray-300 mb-4">Cannot connect to backend server</p>
+                        <button onclick="loadMovies()" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium">
+                            Retry Connection
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('movieCount').textContent = allMovies.length;
+            document.getElementById('totalMovies').textContent = allMovies.length;
+            document.getElementById('tamilMovies').textContent = allMovies.filter(m => m.language === 'Tamil').length;
+            document.getElementById('hindiMovies').textContent = allMovies.filter(m => m.language === 'Hindi').length;
+            document.getElementById('englishMovies').textContent = allMovies.filter(m => m.language === 'English').length;
+        }
+
+        function displayMovies(movies) {
+            const container = document.getElementById('moviesContainer');
+            
+            if (movies.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-5 text-center py-12">
+                        <i class="fas fa-film text-5xl text-gray-600 mb-4"></i>
+                        <h3 class="text-2xl font-bold text-gray-400">No movies found</h3>
+                        <p class="text-gray-500">Try a different filter</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = movies.map(movie => `
+                <div class="movie-card rounded-2xl overflow-hidden relative">
+                    <!-- Status Badge -->
+                    <div class="status-badge ${movie.status === 'now_showing' ? 'now-showing' : 'upcoming'}">
+                        ${movie.status === 'now_showing' ? 'NOW SHOWING' : 'COMING SOON'}
+                    </div>
+                    
+                    <!-- Movie Poster with language-based fallback -->
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="${movie.poster_url}" 
+                             alt="${movie.title}"
+                             class="movie-poster w-full h-full object-cover"
+                             onerror="this.onerror=null; this.src=getPlaceholderByLanguage('${movie.language}');"
+                             loading="lazy">
+                        
+                        <!-- Rating Overlay -->
+                        <div class="absolute bottom-4 right-4 rating-badge px-3 py-1 rounded-full text-sm font-bold">
+                            ${movie.rating || 'TBA'}/10
+                        </div>
+                    </div>
+                    
+                    <!-- Movie Details -->
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold mb-2 truncate">${movie.title}</h3>
+                        
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="language-badge px-3 py-1 rounded-full text-xs font-medium">
+                                ${movie.language}
+                            </span>
+                            <span class="text-gray-400 text-sm">
+                                <i class="fas fa-clock mr-1"></i>${movie.duration || 'NA'} min
+                            </span>
+                        </div>
+                        
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">${movie.description}</p>
+                        
+                        <div class="text-xs text-gray-500 mb-4">
+                            <i class="fas fa-users mr-1"></i> 
+                            <span class="truncate">${movie.cast.substring(0, 40)}${movie.cast.length > 40 ? '...' : ''}</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm text-gray-400">
+                                <i class="fas fa-user mr-1"></i>${movie.director}
+                            </div>
+                            <button onclick="bookMovie(${movie.id}, '${movie.title}')" 
+                                    class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 
+                                           px-5 py-2 rounded-lg font-medium text-sm transition-all duration-300 transform hover:scale-105">
+                                <i class="fas fa-ticket-alt mr-2"></i>Book Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getPlaceholderByLanguage(language) {
+            const placeholders = {
+                'Tamil': 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=1000&auto=format&fit=crop',
+                'Hindi': 'https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=1000&auto=format&fit=crop',
+                'English': 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1000&auto=format&fit=crop',
+                'Telugu': 'https://images.unsplash.com/photo-1595769812725-4c6564f68333?q=80&w=1000&auto=format&fit=crop',
+                'Malayalam': 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?q=80&w=1000&auto=format&fit=crop'
+            };
+            return placeholders[language] || 'https://images.unsplash.com/photo-1489599809516-9827b6d1cf13?q=80&w=1000&auto=format&fit=crop';
+        }
+
+        function filterMovies(filter) {
+            currentFilter = filter;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('bg-gray-800', 'hover:bg-gray-700');
+                btn.classList.remove('bg-gradient-to-r', 'from-blue-600', 'to-purple-600');
+            });
+            event.target.classList.add('active');
+            event.target.classList.remove('bg-gray-800', 'hover:bg-gray-700');
+            
+            let filtered = [];
+            if (filter === 'all') {
+                filtered = allMovies;
+            } else if (filter === 'trending') {
+                filtered = allMovies.filter(movie => movie.is_trending);
+            } else if (filter === 'upcoming') {
+                filtered = allMovies.filter(movie => movie.status === 'upcoming');
+            } else {
+                filtered = allMovies.filter(movie => movie.language === filter);
+            }
+            
+            displayMovies(filtered);
+        }
+
+function searchContent() {
+    const query = document.getElementById('searchInput').value.toLowerCase().trim();
+    
+    if (!query) {
+        // If search is empty, show all movies based on current filter
+        filterMovies(currentFilter);
+        return;
+    }
+    
+    console.log(`Searching for: "${query}"`);
+    
+    // Search across ALL movies
+    const filtered = allMovies.filter(movie => 
+        movie.title.toLowerCase().includes(query) ||
+        (movie.tamil_title && movie.tamil_title.toLowerCase().includes(query)) ||
+        movie.genre.toLowerCase().includes(query) ||
+        movie.language.toLowerCase().includes(query) ||
+        movie.cast.toLowerCase().includes(query) ||
+        movie.director.toLowerCase().includes(query)
+    );
+    
+    // Also search in concerts, sports, events if we have those arrays
+    // For now, let's just search movies
+    
+    if (filtered.length === 0) {
+        // Show no results message
+        document.getElementById('moviesContainer').innerHTML = `
+            <div class="col-span-5 text-center py-12">
+                <i class="fas fa-search text-5xl text-gray-600 mb-4"></i>
+                <h3 class="text-2xl font-bold text-gray-400">No results found for "${query}"</h3>
+                <p class="text-gray-500 mt-2">Try searching for: Leo, Jawan, Animal, Tamil, Hindi, English</p>
+                <button onclick="filterMovies('all')" class="mt-4 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium">
+                    Show All Movies
+                </button>
+            </div>
+        `;
+        
+        // Update stats
+        document.getElementById('movieCount').textContent = '0';
+        document.getElementById('totalMovies').textContent = filtered.length;
+    } else {
+        // Show search results
+        console.log(`Found ${filtered.length} results`);
+        displayMovies(filtered);
+        
+        // Update search results header
+        const header = document.querySelector('#movies-section .section-header h2');
+        if (header) {
+            header.innerHTML = `<i class="fas fa-search mr-3 text-blue-400"></i>Search Results for "${query}" (${filtered.length} found)`;
+        }
+        
+        // Update stats
+        document.getElementById('movieCount').textContent = filtered.length;
+        document.getElementById('totalMovies').textContent = filtered.length;
+    }
+}
+
+// FOR MOVIES (keep as is):
+function bookMovie(id, title) {
+    localStorage.setItem('bookingType', 'movie');
+    localStorage.setItem('movieName', title);
+    localStorage.setItem('movieId', id);
+    window.location.href = 'theaters.html';
+}
+
+// FOR CONCERTS (NEW):
+function bookConcert(concertName) {
+    localStorage.setItem('bookingType', 'concert');
+    localStorage.setItem('concertName', concertName);
+    window.location.href = 'concert-booking.html?name=' + encodeURIComponent(concertName);
+}
+
+// FOR SPORTS (NEW):
+function bookSports(sportName) {
+    localStorage.setItem('bookingType', 'sports');
+    localStorage.setItem('sportsName', sportName);
+    window.location.href = 'sports-booking.html?name=' + encodeURIComponent(sportName);
+}
+
+// FOR EVENTS (NEW):
+function bookEvent(eventName) {
+    localStorage.setItem('bookingType', 'event');
+    localStorage.setItem('eventName', eventName);
+    window.location.href = 'event-booking.html?name=' + encodeURIComponent(eventName);
+}
+
+// FOR COMEDY (NEW):
+function bookComedy(comedyName) {
+    localStorage.setItem('bookingType', 'comedy');
+    localStorage.setItem('comedyName', comedyName);
+    window.location.href = 'comedy-booking.html?name=' + encodeURIComponent(comedyName);
+}
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load movies
+            loadMovies();
+            
+            // Initialize search
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchContent();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
