@@ -2,10 +2,6 @@
 
 A complete, responsive web application for booking movie tickets and event passes with a modern dark theme design.
 
-[![Live Status](https://img.shields.io/badge/Status-Live-success)](https://YOUR-USERNAME.github.io/movie-booking-website/)
-[![GitHub Pages](https://img.shields.io/badge/Hosted%20on-GitHub%20Pages-blue?logo=github)](https://pages.github.com/)
-[![MIT License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
-
 ## ✨ Features
 
 ### 🎥 Movie Booking
