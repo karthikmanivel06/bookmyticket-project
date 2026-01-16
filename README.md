@@ -30,3 +30,11 @@ A complete, responsive web application for booking movie tickets and event passe
 🌐 **Live Website:** [Click here to view](https://karthikmanivel06.github.io/bookmyticket-project/)
 
 ## 📁 Project Structure
+
+movie-booking-platform/
+├── index.html # Homepage with movie selection
+├── confirmation.html # Booking confirmation page
+├── event-booking.html # Event booking page
+├── payment.html # Payment processing page
+├── README.md # This documentation
+└── assets/ # (Optional) For images, CSS, JS files
