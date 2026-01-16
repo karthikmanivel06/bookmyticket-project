@@ -31,10 +31,9 @@ A complete, responsive web application for booking movie tickets and event passe
 
 ## 📁 Project Structure
 
-movie-booking-platform/
-├── index.html # Homepage with movie selection
-├── confirmation.html # Booking confirmation page
-├── event-booking.html # Event booking page
-├── payment.html # Payment processing page
-├── README.md # This documentation
-└── assets/ # (Optional) For images, CSS, JS files
+- **index.html** - Homepage with movie selection
+- **confirmation.html** - Booking confirmation page
+- **event-booking.html** - Event booking page
+- **payment.html** - Payment processing page
+- **README.md** - This documentation file
+- **assets/** - Folder for images, CSS, and JavaScript files
