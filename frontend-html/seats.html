@@ -93,7 +93,6 @@
             transform: scale(1.1);
         }
         
-        /* FIXED: Selected seats now show GREEN color */
         .seat.selected {
             background: #00adb5 !important;
             border-color: #00adb5 !important;
@@ -112,7 +111,6 @@
             border-color: #ffa502;
         }
         
-        /* FIXED: VIP seats also turn GREEN when selected */
         .seat.vip.selected {
             background: #00adb5 !important;
             border-color: #00adb5 !important;
@@ -213,7 +211,7 @@
     </div>
 
     <div class="booking-info">
-        <h2>Master</h2>
+        <h2 id="selectedMovieTitle">The Dark Knight</h2>
         <div id="bookingDetails">PVR Cinemas • Today 08:00 PM • Screen 5</div>
     </div>
 
@@ -319,9 +317,15 @@
     </div>
 
     <script>
+        // Load selected movie from localStorage
+        const selectedMovie = localStorage.getItem('selectedMovie') || 'The Dark Knight';
+        document.getElementById('selectedMovieTitle').textContent = selectedMovie;
+
         // Load booking details
-        document.getElementById('bookingDetails').textContent = 
-            `${localStorage.getItem('selectedTheater') || 'PVR Cinemas'} • ${localStorage.getItem('selectedDate') || 'Today'} ${localStorage.getItem('selectedShowtime') || '08:00 PM'} • Screen 5`;
+        const theater = localStorage.getItem('selectedTheater') || 'PVR Cinemas';
+        const date = localStorage.getItem('selectedDate') || 'Today';
+        const time = localStorage.getItem('selectedShowtime') || '08:00 PM';
+        document.getElementById('bookingDetails').textContent = `${theater} • ${date} ${time} • Screen 5`;
 
         let selectedSeats = [];
         let seatPrices = {
@@ -335,11 +339,9 @@
                 const seatId = this.getAttribute('data-seat');
                 
                 if (this.classList.contains('selected')) {
-                    // Deselect seat
                     this.classList.remove('selected');
                     selectedSeats = selectedSeats.filter(s => s !== seatId);
                 } else {
-                    // Select seat
                     this.classList.add('selected');
                     selectedSeats.push(seatId);
                 }
@@ -356,7 +358,6 @@
             seatsList.textContent = selectedSeats.length > 0 ? selectedSeats.join(', ') : 'None';
             totalSeats.textContent = selectedSeats.length;
             
-            // Calculate total price
             let total = 0;
             selectedSeats.forEach(seat => {
                 const seatElement = document.querySelector(`[data-seat="${seat}"]`);
@@ -373,15 +374,25 @@
 
         function proceedToPayment() {
             if (selectedSeats.length === 0) {
-                alert('Please select at least one seat!');
                 return;
             }
             
-            // Save seat selection to localStorage
+            // Save ALL data to localStorage
             localStorage.setItem('selectedSeats', JSON.stringify(selectedSeats));
             localStorage.setItem('totalPrice', document.getElementById('totalPrice').textContent);
+            localStorage.setItem('selectedMovie', document.getElementById('selectedMovieTitle').textContent);
+            localStorage.setItem('selectedTheater', theater);
+            localStorage.setItem('selectedDate', date);
+            localStorage.setItem('selectedShowtime', time);
             
-            // Redirect to payment page
+            // Force save and redirect
+            console.log('Saving data:', {
+                movie: localStorage.getItem('selectedMovie'),
+                theater: localStorage.getItem('selectedTheater'),
+                seats: localStorage.getItem('selectedSeats'),
+                total: localStorage.getItem('totalPrice')
+            });
+            
             window.location.href = 'payment.html';
         }
     </script>

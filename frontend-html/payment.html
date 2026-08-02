@@ -307,31 +307,31 @@
             <h2>Booking Summary</h2>
             <div class="summary-item">
                 <span>Movie:</span>
-                <span>Master</span>
+                <span id="summaryMovie">Loading...</span>
             </div>
             <div class="summary-item">
                 <span>Theater:</span>
-                <span id="summaryTheater">PVR Cinemas</span>
+                <span id="summaryTheater">Loading...</span>
             </div>
             <div class="summary-item">
                 <span>Date & Time:</span>
-                <span id="summaryTime">Today, 08:00 PM</span>
+                <span id="summaryTime">Loading...</span>
             </div>
             <div class="summary-item">
                 <span>Seats:</span>
-                <span id="summarySeats">A1, A2, A3</span>
+                <span id="summarySeats">Loading...</span>
             </div>
             <div class="summary-item">
                 <span>Ticket Price:</span>
-                <span>₹<span id="summaryTicketPrice">750</span></span>
+                <span>₹<span id="summaryTicketPrice">0</span></span>
             </div>
             <div class="summary-item">
                 <span>Convenience Fee:</span>
-                <span>₹<span id="summaryFee">50</span></span>
+                <span>₹<span id="summaryFee">0</span></span>
             </div>
             <div class="summary-item total">
                 <span>Total Amount:</span>
-                <span>₹<span id="summaryTotal">800</span></span>
+                <span>₹<span id="summaryTotal">0</span></span>
             </div>
         </div>
 
@@ -344,7 +344,6 @@
                 <button class="method-tab" data-method="wallet">💰 Wallet</button>
             </div>
 
-            <!-- Card Payment Form -->
             <div class="payment-form active" id="card-form">
                 <div class="form-group">
                     <label for="cardNumber">Card Number</label>
@@ -366,7 +365,6 @@
                 </div>
             </div>
 
-            <!-- UPI Payment Form -->
             <div class="payment-form" id="upi-form">
                 <div class="upi-options">
                     <div class="upi-option active" data-upi="gpay">GPay</div>
@@ -380,7 +378,6 @@
                 </div>
             </div>
 
-            <!-- Wallet Payment Form -->
             <div class="payment-form" id="wallet-form">
                 <div class="wallet-options">
                     <div class="wallet-option active">
@@ -406,38 +403,54 @@
     </div>
 
     <script>
-        // Load booking summary
-        document.getElementById('summaryTheater').textContent = 
-            localStorage.getItem('selectedTheater') || 'PVR Cinemas';
-        document.getElementById('summaryTime').textContent = 
-            `${localStorage.getItem('selectedDate') || 'Today'}, ${localStorage.getItem('selectedShowtime') || '08:00 PM'}`;
-        
-        const selectedSeats = JSON.parse(localStorage.getItem('selectedSeats')) || ['A1', 'A2', 'A3'];
-        const totalPrice = localStorage.getItem('totalPrice') || '750';
-        
-        document.getElementById('summarySeats').textContent = selectedSeats.join(', ');
-        document.getElementById('summaryTicketPrice').textContent = totalPrice;
-        
-        // Calculate convenience fee (10% of ticket price)
-        const convenienceFee = Math.round(parseInt(totalPrice) * 0.1);
-        document.getElementById('summaryFee').textContent = convenienceFee;
-        
-        const finalTotal = parseInt(totalPrice) + convenienceFee;
-        document.getElementById('summaryTotal').textContent = finalTotal;
-        
-        // Save final total
-        localStorage.setItem('finalAmount', finalTotal);
+        // Load booking summary from localStorage
+        function loadBookingSummary() {
+            const movie = localStorage.getItem('selectedMovie') || 'The Dark Knight';
+            const theater = localStorage.getItem('selectedTheater') || 'PVR Cinemas';
+            const date = localStorage.getItem('selectedDate') || 'Today';
+            const time = localStorage.getItem('selectedShowtime') || '08:00 PM';
+            const seatsRaw = localStorage.getItem('selectedSeats');
+            const totalPrice = localStorage.getItem('totalPrice') || '0';
+            
+            let seatsText = 'A1, A2, A3';
+            if (seatsRaw) {
+                try {
+                    const seats = JSON.parse(seatsRaw);
+                    seatsText = Array.isArray(seats) ? seats.join(', ') : seatsRaw;
+                } catch (e) {
+                    seatsText = seatsRaw;
+                }
+            }
+            
+            document.getElementById('summaryMovie').textContent = movie;
+            document.getElementById('summaryTheater').textContent = theater;
+            document.getElementById('summaryTime').textContent = `${date}, ${time}`;
+            document.getElementById('summarySeats').textContent = seatsText;
+            document.getElementById('summaryTicketPrice').textContent = totalPrice;
+            
+            const ticketPrice = parseInt(totalPrice) || 0;
+            const convenienceFee = Math.round(ticketPrice * 0.1);
+            const finalTotal = ticketPrice + convenienceFee;
+            
+            document.getElementById('summaryFee').textContent = convenienceFee;
+            document.getElementById('summaryTotal').textContent = finalTotal;
+            
+            localStorage.setItem('finalAmount', finalTotal);
+            
+            console.log('✅ Payment page loaded with:', {
+                movie, theater, date, time, seatsText, totalPrice, finalTotal
+            });
+        }
+
+        // Load on page load
+        window.onload = loadBookingSummary;
 
         // Payment method tabs
         document.querySelectorAll('.method-tab').forEach(tab => {
             tab.addEventListener('click', function() {
                 const method = this.getAttribute('data-method');
-                
-                // Update active tab
                 document.querySelectorAll('.method-tab').forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
-                
-                // Show corresponding form
                 document.querySelectorAll('.payment-form').forEach(form => {
                     form.classList.remove('active');
                 });
@@ -482,7 +495,6 @@
         }
 
         function processPayment() {
-            // Simple validation
             const activeMethod = document.querySelector('.method-tab.active').getAttribute('data-method');
             let isValid = true;
             
@@ -503,20 +515,25 @@
             }
             
             if (!isValid) {
-                alert('Please fill all required payment details!');
+                // Silent - No alert
                 return;
             }
             
             // Save payment method
             localStorage.setItem('paymentMethod', activeMethod);
             
-            // Show loading
-            alert('Processing payment...');
+            // Log all data before redirect
+            console.log('✅ Payment processed. Redirecting to confirmation...');
+            console.log('All data:', {
+                movie: localStorage.getItem('selectedMovie'),
+                theater: localStorage.getItem('selectedTheater'),
+                seats: localStorage.getItem('selectedSeats'),
+                total: localStorage.getItem('finalAmount'),
+                payment: localStorage.getItem('paymentMethod')
+            });
             
-            // Simulate payment processing
-            setTimeout(() => {
-                window.location.href = 'confirmation.html';
-            }, 1500);
+            // Redirect to confirmation page
+            window.location.href = 'confirmation.html';
         }
     </script>
 </body>

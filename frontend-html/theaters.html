@@ -150,6 +150,10 @@
             background: #00adb5;
         }
         
+        .showtime-btn.selected {
+            background: #00adb5 !important;
+        }
+        
         .continue-btn {
             display: block;
             width: 200px;
@@ -191,37 +195,37 @@
         </div>
     </div>
 
-<div class="movie-info">
-    <img src="https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_FMjpg_UX1000_.jpg" 
-         alt="The Dark Knight" class="movie-poster-small">
-    <div class="movie-details">
-        <h2>The Dark Knight</h2>
-        <div class="movie-meta">
-            <span>Action/Crime/Drama • 2h 32m • UA • 4.9/5</span>
+    <div class="movie-info">
+        <img src="https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_FMjpg_UX1000_.jpg" 
+             alt="The Dark Knight" class="movie-poster-small">
+        <div class="movie-details">
+            <h2 id="movieTitle">The Dark Knight</h2>
+            <div class="movie-meta">
+                <span id="movieMeta">Action/Crime/Drama • 2h 32m • UA • 4.9/5</span>
+            </div>
         </div>
     </div>
-</div>
 
     <div class="date-selector">
         <h3>Select Date</h3>
         <div class="date-scroll">
-            <div class="date-item active">
+            <div class="date-item active" data-date="Today Dec 22">
                 <div>Today</div>
                 <div>Dec 22</div>
             </div>
-            <div class="date-item">
+            <div class="date-item" data-date="Tomorrow Dec 23">
                 <div>Tomorrow</div>
                 <div>Dec 23</div>
             </div>
-            <div class="date-item">
+            <div class="date-item" data-date="Sunday Dec 24">
                 <div>Sunday</div>
                 <div>Dec 24</div>
             </div>
-            <div class="date-item">
+            <div class="date-item" data-date="Monday Dec 25">
                 <div>Monday</div>
                 <div>Dec 25</div>
             </div>
-            <div class="date-item">
+            <div class="date-item" data-date="Tuesday Dec 26">
                 <div>Tuesday</div>
                 <div>Dec 26</div>
             </div>
@@ -236,11 +240,11 @@
                 <div class="facilities">Dolby Atmos • 4K • Recliner Seats</div>
             </div>
             <div class="showtimes">
-                <button class="showtime-btn" onclick="selectShowtime('10:00 AM')">10:00 AM</button>
-                <button class="showtime-btn" onclick="selectShowtime('01:30 PM')">01:30 PM</button>
-                <button class="showtime-btn" onclick="selectShowtime('04:45 PM')">04:45 PM</button>
-                <button class="showtime-btn" onclick="selectShowtime('08:00 PM')">08:00 PM</button>
-                <button class="showtime-btn" onclick="selectShowtime('11:15 PM')">11:15 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime(this, '10:00 AM')">10:00 AM</button>
+                <button class="showtime-btn" onclick="selectShowtime(this, '01:30 PM')">01:30 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime(this, '04:45 PM')">04:45 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime(this, '08:00 PM')">08:00 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime(this, '11:15 PM')">11:15 PM</button>
             </div>
         </div>
 
@@ -251,10 +255,10 @@
                 <div class="facilities">IMAX • 3D Available • Food Court</div>
             </div>
             <div class="showtimes">
-                <button class="showtime-btn" onclick="selectShowtime('11:00 AM')">11:00 AM</button>
-                <button class="showtime-btn" onclick="selectShowtime('02:15 PM')">02:15 PM</button>
-                <button class="showtime-btn" onclick="selectShowtime('05:30 PM')">05:30 PM</button>
-                <button class="showtime-btn" onclick="selectShowtime('09:00 PM')">09:00 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime(this, '11:00 AM')">11:00 AM</button>
+                <button class="showtime-btn" onclick="selectShowtime(this, '02:15 PM')">02:15 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime(this, '05:30 PM')">05:30 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime(this, '09:00 PM')">09:00 PM</button>
             </div>
         </div>
 
@@ -265,11 +269,11 @@
                 <div class="facilities">4DX • Premium Lounge • Valet Parking</div>
             </div>
             <div class="showtimes">
-                <button class="showtime-btn" onclick="selectShowtime('10:30 AM')">10:30 AM</button>
-                <button class="showtime-btn" onclick="selectShowtime('01:45 PM')">01:45 PM</button>
-                <button class="showtime-btn" onclick="selectShowtime('05:00 PM')">05:00 PM</button>
-                <button class="showtime-btn" onclick="selectShowtime('08:30 PM')">08:30 PM</button>
-                <button class="showtime-btn" onclick="selectShowtime('11:45 PM')">11:45 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime(this, '10:30 AM')">10:30 AM</button>
+                <button class="showtime-btn" onclick="selectShowtime(this, '01:45 PM')">01:45 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime(this, '05:00 PM')">05:00 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime(this, '08:30 PM')">08:30 PM</button>
+                <button class="showtime-btn" onclick="selectShowtime(this, '11:45 PM')">11:45 PM</button>
             </div>
         </div>
     </div>
@@ -277,33 +281,50 @@
     <button class="continue-btn" onclick="proceedToSeats()">Select Seats →</button>
 
     <script>
+        // Load selected movie from localStorage
+        window.onload = function() {
+            const movieTitle = localStorage.getItem('selectedMovie') || 'The Dark Knight';
+            document.getElementById('movieTitle').textContent = movieTitle;
+            
+            // Update poster if available
+            const poster = localStorage.getItem('selectedMoviePoster');
+            if (poster) {
+                document.querySelector('.movie-poster-small').src = poster;
+            }
+        };
+
         let selectedShowtime = null;
         let selectedTheater = null;
 
-        function selectShowtime(time) {
+        function selectShowtime(button, time) {
             selectedShowtime = time;
-            // Remove active class from all buttons
-            document.querySelectorAll('.showtime-btn').forEach(btn => {
-                btn.style.background = 'rgba(0, 173, 181, 0.2)';
+            
+            // Remove selected class from all buttons in this theater
+            const theaterCard = button.closest('.theater-card');
+            theaterCard.querySelectorAll('.showtime-btn').forEach(btn => {
+                btn.classList.remove('selected');
             });
-            // Add active class to clicked button
-            event.target.style.background = '#00adb5';
             
-            selectedTheater = event.target.closest('.theater-card').querySelector('h3').textContent;
+            // Add selected class to clicked button
+            button.classList.add('selected');
             
-            alert(`Selected: ${selectedTheater} at ${time}`);
+            selectedTheater = theaterCard.querySelector('h3').textContent;
+            
+            // NO POPUP - NO NOTIFICATION - SILENT
         }
 
         function proceedToSeats() {
             if (!selectedShowtime) {
-                alert('Please select a showtime first!');
+                // SILENT - just return, do nothing
                 return;
             }
             
             // Save selection to localStorage
             localStorage.setItem('selectedTheater', selectedTheater);
             localStorage.setItem('selectedShowtime', selectedShowtime);
-            localStorage.setItem('selectedDate', document.querySelector('.date-item.active').textContent);
+            
+            const activeDate = document.querySelector('.date-item.active');
+            localStorage.setItem('selectedDate', activeDate ? activeDate.getAttribute('data-date') : 'Today');
             
             // Redirect to seats page
             window.location.href = 'seats.html';
