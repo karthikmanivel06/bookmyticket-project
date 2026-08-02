@@ -27,7 +27,7 @@ A complete, responsive web application for booking movie tickets and event passe
 
 ## 🚀 Live Demo
 
-🌐 **Live Website:** [Click here to view](https://karthikmanivel06.github.io/bookmyticket-project/)
+🌐 **Live Website:** [Click here to view](https://karthikmanivel06.github.io/bookmyticket-project/frontend-html/index.html)
 
 ## 📁 Project Structure
 
@@ -37,3 +37,11 @@ A complete, responsive web application for booking movie tickets and event passe
 - **payment.html** - Payment processing page
 - **README.md** - This documentation file
 - **assets/** - Folder for images, CSS, and JavaScript files
+
+## 🛠️ Tech Stack
+- **Frontend:** HTML, Tailwind CSS, JavaScript
+- **Backend:** Node.js, Express
+- **Database:** MySQL
+
+## ⚙️ Running Locally
+1. Clone the repo git clone https://github.com/karthikmanivel06/bookmyticket-project.git
