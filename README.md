@@ -27,7 +27,7 @@ A complete, responsive web application for booking movie tickets and event passe
 
 ## 🚀 Live Demo
 
-🌐 **Live Website:** [Click here to view](https://karthikmanivel06.github.io/bookmyticket-project/)
+🌐 **Live Website:** [Click here to view](https://karthikmanivel06.github.io/bookmyticket-project/frontend-html/index.html)
 
 ## 📁 Project Structure
 
