@@ -192,9 +192,7 @@
         
         <div class="info">
             Loading your personalized movie experience...
-            <div style="margin-top: 10px; font-size: 0.8rem;">
-                <span id="movieCount">0</span> movies loaded from database
-            </div>
+            <!-- Removed the "X movies loaded from database" line -->
         </div>
     </div>
 
@@ -203,16 +201,7 @@
         let countdown = 5;
         const countdownElement = document.getElementById('countdown');
         
-        // Get movie count from backend
-        async function getMovieCount() {
-            try {
-              const response = await fetch('http://localhost:5001/api/movies');
-                const movies = await response.json();
-                document.getElementById('movieCount').textContent = movies.length;
-            } catch (error) {
-                console.log('Backend not connected yet');
-            }
-        }
+        // Removed the async getMovieCount() function that was showing the message
         
         // Start countdown
         const timer = setInterval(() => {
@@ -234,9 +223,6 @@
                 window.location.href = 'index.html';
             }, 1000);
         }
-        
-        // Try to get movie count
-        getMovieCount();
         
         // Press any key to skip
         document.addEventListener('keydown', redirectToMain);

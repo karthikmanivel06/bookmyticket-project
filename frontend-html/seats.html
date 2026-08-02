@@ -79,6 +79,7 @@
             width: 35px;
             height: 35px;
             background: #444;
+            border: 2px solid #666;
             border-radius: 5px 5px 0 0;
             cursor: pointer;
             transition: all 0.3s;
@@ -88,29 +89,39 @@
             font-size: 12px;
         }
         
-        .seat:hover {
+        .seat:hover:not(.occupied) {
             transform: scale(1.1);
         }
         
+        /* FIXED: Selected seats now show GREEN color */
         .seat.selected {
-            background: #00adb5;
+            background: #00adb5 !important;
+            border-color: #00adb5 !important;
+            box-shadow: 0 0 10px rgba(0, 173, 181, 0.5) !important;
+            transform: scale(1.1);
         }
         
         .seat.occupied {
             background: #ff4757;
+            border-color: #ff4757;
             cursor: not-allowed;
         }
         
         .seat.vip {
             background: #ffa502;
+            border-color: #ffa502;
         }
         
+        /* FIXED: VIP seats also turn GREEN when selected */
         .seat.vip.selected {
-            background: #ff7b00;
+            background: #00adb5 !important;
+            border-color: #00adb5 !important;
+            box-shadow: 0 0 10px rgba(0, 173, 181, 0.5) !important;
         }
         
         .seat.standard {
             background: #444;
+            border-color: #666;
         }
         
         .seat-info {
