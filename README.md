@@ -1,47 +1,55 @@
-# 🎬 Movie & Event Booking Platform
+# 🎬 BookMyTicket - Movie & Event Booking Platform
 
-A complete, responsive web application for booking movie tickets and event passes with a modern dark theme design.
+A full-stack web application for booking movie tickets and event passes with a modern dark theme design.
+
+[![Live Website](https://img.shields.io/badge/Live-Website-success)](https://karthikmanivel06.github.io/bookmyticket-project/frontend-html/index.html)
+[![Backend API](https://img.shields.io/badge/Backend-Vercel-blue)](https://bookmyticket-project.vercel.app)
+[![Database](https://img.shields.io/badge/Database-Aiven%20MySQL-orange)](https://aiven.io)
+
+---
+
+## 🚀 Live URLs
+
+| Service | URL |
+|---------|-----|
+| **Live Website** | [https://karthikmanivel06.github.io/bookmyticket-project/frontend-html/index.html](https://karthikmanivel06.github.io/bookmyticket-project/frontend-html/index.html) |
+| **Backend API** | [https://bookmyticket-project.vercel.app](https://bookmyticket-project.vercel.app) |
+| **API Endpoint** | [https://bookmyticket-project.vercel.app/api/movies](https://bookmyticket-project.vercel.app/api/movies) |
+
+---
 
 ## ✨ Features
 
 ### 🎥 Movie Booking
-- **Movie Selection**: Browse and select from various movies
-- **Theater Selection**: Choose from multiple theaters with details
-- **Seat Selection**: Interactive seat map with real-time selection
-- **Showtime Selection**: Multiple time slots for each day
-- **Payment Processing**: Secure payment gateway simulation
-- **Booking Confirmation**: Detailed ticket with QR code
+- Movie selection with posters
+- Theater & showtime selection
+- Interactive seat selection
+- Payment processing
+- Booking confirmation with download ticket
 
 ### 🎭 Event Booking
-- **Event Pass Selection**: Single day, weekend, full event, and VIP passes
-- **Date Selection**: Calendar-style date picker
-- **Quantity Control**: Adjust number of passes
-- **Dynamic Pricing**: Real-time total calculation
+- Multiple pass types (Single, Weekend, Full, VIP)
+- Date selection
+- Quantity control
+- Dynamic pricing
 
-### 🎨 Design Features
-- **Dark Theme**: Eye-friendly dark gradient background
-- **Responsive Design**: Works on all devices
-- **Animations**: Smooth transitions and confetti effects
-- **Glass Morphism**: Modern UI with translucent elements
-- **Progress Steps**: Visual booking progress indicator
+### 🎨 Design
+- Dark theme with modern gradient
+- Responsive design for all devices
+- Smooth animations
+- Glass morphism effects
 
-## 🚀 Live Demo
-
-🌐 **Live Website:** [Click here to view](https://karthikmanivel06.github.io/bookmyticket-project/frontend-html/index.html)
-
-## 📁 Project Structure
-
-- **index.html** - Homepage with movie selection
-- **confirmation.html** - Booking confirmation page
-- **event-booking.html** - Event booking page
-- **payment.html** - Payment processing page
-- **README.md** - This documentation file
-- **assets/** - Folder for images, CSS, and JavaScript files
+---
 
 ## 🛠️ Tech Stack
-- **Frontend:** HTML, Tailwind CSS, JavaScript
-- **Backend:** Node.js, Express
-- **Database:** MySQL
 
-## ⚙️ Running Locally
-1. Clone the repo git clone https://github.com/karthikmanivel06/bookmyticket-project.git
+| Layer | Technology | Hosted On |
+|-------|-----------|-----------|
+| Frontend | HTML5, CSS3, JavaScript | GitHub Pages |
+| Backend | Node.js, Express.js | Vercel |
+| Database | MySQL 8.4 | Aiven Cloud |
+| APIs | REST API with JSON | - |
+
+---
+
+## 📁 Project Structure
