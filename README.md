@@ -1,84 +1,50 @@
 # 🎬 BookMyTicket
 
-A full-stack movie and event booking web application.
+### Movie & Event Booking Website
 
-## 📌 About
+A simple full-stack booking website for browsing movies, selecting shows and seats, and booking movie tickets and events.
 
-BookMyTicket is a movie and event booking platform where users can browse movies, select theaters and showtimes, choose seats, and complete bookings. It also supports event booking with different pass options.
+## 🌐 Live Website
+
+👉 **[Open BookMyTicket](https://karthikmanivel06.github.io/bookmyticket-project/frontend-html/index.html)**
 
 ## ✨ Features
 
-* Browse movies with posters, ratings, language, and genre
+🎥 **Movies**
+
+* Browse movies
 * Search movies
-* Filter movies by language
-* View theaters and showtimes
-* Select seats
-* Calculate ticket price based on selected seats
-* Movie booking and confirmation
-* Event booking with different pass types
-* Payment selection
-* Booking confirmation
+* Filter by language
+* View ratings and details
 
-## 🛠️ Technologies Used
+🎟️ **Movie Booking**
 
-* **Frontend:** HTML, CSS, JavaScript
-* **Backend:** Node.js, Express.js
-* **Database:** MySQL
-* **Deployment:** GitHub Pages and Vercel
+* Select theater and showtime
+* Choose seats
+* View ticket price
+* Select payment method
+* Get booking confirmation
 
-## 📂 Project Structure
+🎫 **Event Booking**
 
-```text
-bookmyticket-project/
-│
-├── backend/
-│   ├── server.js
-│   ├── package.json
-│   └── .env
-│
-├── frontend-html/
-│   ├── index.html
-│   ├── theaters.html
-│   ├── seats.html
-│   ├── payment.html
-│   ├── confirmation.html
-│   └── event-booking.html
-│
-└── README.md
-```
+* Choose event
+* Select pass type
+* Select date and quantity
+* Complete booking
 
-## 🚀 How to Run
+## 🛠️ Built With
 
-### 1. Clone the repository
+* HTML
+* CSS
+* JavaScript
+* Node.js
+* Express.js
+* MySQL
 
-```bash
-git clone https://github.com/karthikmanivel06/bookmyticket-project.git
-cd bookmyticket-project
-```
+## 📸 Preview
 
-### 2. Install backend dependencies
+Visit the live website to explore the complete booking flow.
 
-```bash
-cd backend
-npm install
-```
+---
 
-### 3. Start the backend
-
-```bash
-npm start
-```
-
-### 4. Open the frontend
-
-Open `frontend-html/index.html` in your browser.
-
-## 🌐 Live Demo
-
-[BookMyTicket](https://karthikmanivel06.github.io/bookmyticket-project/frontend-html/index.html)
-
-## 👨‍💻 Author
-
-**Karthik Manivel**
-
-GitHub: [karthikmanivel06](https://github.com/karthikmanivel06)
+⭐ **BookMyTicket — Browse. Book. Enjoy.**
