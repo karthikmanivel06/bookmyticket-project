@@ -5,8 +5,16 @@ const mysql = require('mysql2');
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// Middleware - CORS fixed to allow GitHub Pages
+app.use(cors({
+    origin: [
+        'http://localhost:5500',
+        'http://127.0.0.1:5500',
+        'http://localhost:3000',
+        'https://karthikmanivel06.github.io'
+    ],
+    credentials: true
+}));
 app.use(express.json());
 
 // MySQL Connection
@@ -139,7 +147,7 @@ app.get('/', (req, res) => {
 
 // ========== START SERVER ==========
 
-const PORT = 5001;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
     console.log(`✅ Server running on http://localhost:${PORT}`);
     console.log(`🌐 Test URLs:`);
